@@ -3,20 +3,15 @@ package com.nicolasmartineli.taskflow_api.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
-@EntityListeners(AuditingEntityListener.class)
-public class User {
+
+public class User extends BaseEntity {
 
     @Id
     @Column(name = "id")
@@ -35,12 +30,5 @@ public class User {
     @Column(name = "role", nullable = false, length = 50)
     private String role;
 
-    @LastModifiedDate
-    @Column(name = "update_date")
-    private LocalDateTime updateDate;
-
-    @CreatedDate
-    @Column(name = "registration_date")
-    private LocalDateTime registrationDate;
 
 }
