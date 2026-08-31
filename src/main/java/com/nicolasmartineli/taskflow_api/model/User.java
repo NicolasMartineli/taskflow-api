@@ -10,7 +10,6 @@ import java.util.UUID;
 @Table(name = "users")
 @Getter
 @Setter
-
 public class User extends BaseEntity {
 
     @Id
@@ -28,7 +27,7 @@ public class User extends BaseEntity {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false, length = 50)
+    @Column(name = "role", nullable = false)
     private UserRole role;
 
 

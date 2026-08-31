@@ -10,7 +10,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "teams")
-
 public class Team extends BaseEntity {
 
     @Id
