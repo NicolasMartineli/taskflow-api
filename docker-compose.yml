@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: taskflow-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: taskflow_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - taskflow-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: taskflow-pgadmin
+    ports:
+      - "15432:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    networks:
+      - taskflow-network
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+
+networks:
+  taskflow-network:
+    driver: bridge
