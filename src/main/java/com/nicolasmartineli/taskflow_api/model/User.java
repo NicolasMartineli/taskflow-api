@@ -1,5 +1,6 @@
 package com.nicolasmartineli.taskflow_api.model;
 
+import com.nicolasmartineli.taskflow_api.model.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
