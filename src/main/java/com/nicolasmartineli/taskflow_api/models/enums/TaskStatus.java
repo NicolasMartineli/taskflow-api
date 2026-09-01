@@ -1,4 +1,4 @@
-package com.nicolasmartineli.taskflow_api.model.enums;
+package com.nicolasmartineli.taskflow_api.models.enums;
 
 public enum TaskStatus {
     TODO,

@@ -1,6 +1,6 @@
-package com.nicolasmartineli.taskflow_api.repository;
+package com.nicolasmartineli.taskflow_api.repositories;
 
-import com.nicolasmartineli.taskflow_api.model.User;
+import com.nicolasmartineli.taskflow_api.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
 package com.nicolasmartineli.taskflow_api.dtos;
 
-import com.nicolasmartineli.taskflow_api.model.enums.UserRole;
+import com.nicolasmartineli.taskflow_api.models.enums.UserRole;
 import java.util.UUID;
 
 public record UserResponse(

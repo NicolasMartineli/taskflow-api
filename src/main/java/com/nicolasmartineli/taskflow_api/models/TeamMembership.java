@@ -1,6 +1,6 @@
-package com.nicolasmartineli.taskflow_api.model;
+package com.nicolasmartineli.taskflow_api.models;
 
-import com.nicolasmartineli.taskflow_api.model.enums.TeamRole;
+import com.nicolasmartineli.taskflow_api.models.enums.TeamRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

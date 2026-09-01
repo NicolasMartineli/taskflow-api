@@ -1,4 +1,4 @@
-package com.nicolasmartineli.taskflow_api.model;
+package com.nicolasmartineli.taskflow_api.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
