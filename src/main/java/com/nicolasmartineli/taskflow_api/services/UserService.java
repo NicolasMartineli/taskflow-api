@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -62,6 +61,13 @@ public class UserService {
         repository.save(user);
 
         return mapper.toResponse(user);
+    }
+
+    public void delete(UUID id) {
+
+        User user = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        repository.delete(user);
     }
 
 }
