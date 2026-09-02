@@ -3,11 +3,15 @@ package com.nicolasmartineli.taskflow_api.services;
 import com.nicolasmartineli.taskflow_api.dtos.UserCreateRequest;
 import com.nicolasmartineli.taskflow_api.dtos.UserResponse;
 import com.nicolasmartineli.taskflow_api.exceptions.EmailAlreadyExistsException;
+import com.nicolasmartineli.taskflow_api.exceptions.ResourceNotFoundException;
 import com.nicolasmartineli.taskflow_api.mappers.UserMapper;
 import com.nicolasmartineli.taskflow_api.models.User;
 import com.nicolasmartineli.taskflow_api.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,4 +33,12 @@ public class UserService {
         return mapper.toResponse(user);
 
     }
+
+    public UserResponse findById(UUID id) {
+        User user = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        return mapper.toResponse(user);
+    }
+
 }
