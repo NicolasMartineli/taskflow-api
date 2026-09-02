@@ -8,10 +8,14 @@ import com.nicolasmartineli.taskflow_api.exceptions.ResourceNotFoundException;
 import com.nicolasmartineli.taskflow_api.mappers.UserMapper;
 import com.nicolasmartineli.taskflow_api.models.User;
 import com.nicolasmartineli.taskflow_api.repositories.UserRepository;
+import com.nicolasmartineli.taskflow_api.repositories.specs.UserSpec;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+
 import java.util.UUID;
 
 @Service
@@ -42,10 +46,12 @@ public class UserService {
         return mapper.toResponse(user);
     }
 
-    public List<UserResponse> findAll() {
-        List<User> all = repository.findAll();
+    public Page<UserResponse> findByNameAndEmail(String name, String email, Pageable pageable) {
 
-        return mapper.toListResponse(all);
+        Specification<User> specs = Specification.where((UserSpec.nameLike(name)).and(UserSpec.emailLike(email)));
+
+        return repository.findAll(specs, pageable).map(user -> mapper.toResponse(user));
+
     }
 
     public UserResponse update(UUID id, UserUpdateRequest request) {
