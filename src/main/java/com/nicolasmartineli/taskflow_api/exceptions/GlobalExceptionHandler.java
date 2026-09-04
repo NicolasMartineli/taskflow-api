@@ -13,9 +13,9 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(EmailAlreadyExistsException.class)
+    @ExceptionHandler(DuplicateResourceException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ApiError handleEmailAlreadyExistsException(EmailAlreadyExistsException e) {
+    public ApiError handleEmailAlreadyExistsException(DuplicateResourceException e) {
         return ApiError.conflict(e.getMessage());
 
     }

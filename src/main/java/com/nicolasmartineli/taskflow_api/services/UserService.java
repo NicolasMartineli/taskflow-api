@@ -3,7 +3,7 @@ package com.nicolasmartineli.taskflow_api.services;
 import com.nicolasmartineli.taskflow_api.dtos.UserCreateRequest;
 import com.nicolasmartineli.taskflow_api.dtos.UserResponse;
 import com.nicolasmartineli.taskflow_api.dtos.UserUpdateRequest;
-import com.nicolasmartineli.taskflow_api.exceptions.EmailAlreadyExistsException;
+import com.nicolasmartineli.taskflow_api.exceptions.DuplicateResourceException;
 import com.nicolasmartineli.taskflow_api.exceptions.ResourceNotFoundException;
 import com.nicolasmartineli.taskflow_api.mappers.UserMapper;
 import com.nicolasmartineli.taskflow_api.models.User;
@@ -28,7 +28,7 @@ public class UserService {
     public UserResponse create(UserCreateRequest request) {
 
         if (repository.existsByEmail(request.email())) {
-            throw new EmailAlreadyExistsException("This email already exists");
+            throw new DuplicateResourceException("User", "email", request.email());
 
         }
         User entity = mapper.toEntity(request);
@@ -59,7 +59,7 @@ public class UserService {
         User user = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         if (!user.getEmail().equals(request.email()) && repository.existsByEmail(request.email())) {
-            throw new EmailAlreadyExistsException("This email already exists");
+            throw new DuplicateResourceException("User", "email", request.email());
 
         }
 
