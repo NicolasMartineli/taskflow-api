@@ -12,6 +12,8 @@ import org.mapstruct.MappingConstants;
 public interface TeamMemberShipMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "registrationDate", ignore = true)
+    @Mapping(target = "updateDate", ignore = true)
     @Mapping(target = "roleInTeam", source = "teamMembershipCreateRequest.roleInTeam")
     @Mapping(target = "team", source = "team")
     @Mapping(target = "user", source = "user")
