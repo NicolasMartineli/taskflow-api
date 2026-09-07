@@ -38,4 +38,11 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(BusinessRuleException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handleBusinessRuleException(BusinessRuleException e) {
+
+        return ApiError.conflict(e.getMessage());
+    }
+
 }

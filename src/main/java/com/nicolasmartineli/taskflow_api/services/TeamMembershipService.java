@@ -46,7 +46,7 @@ public class TeamMembershipService {
 
     }
 
-    public void delete(UUID teamId, UUID idUser) {
+    public void removeMember(UUID teamId, UUID idUser) {
         TeamMembership membership = membershipRepository.findByTeamIdAndUserId(teamId, idUser)
                 .orElseThrow(() -> new ResourceNotFoundException("Team or user not found with id"));
 
