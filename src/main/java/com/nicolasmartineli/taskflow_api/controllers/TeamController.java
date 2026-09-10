@@ -1,11 +1,16 @@
 package com.nicolasmartineli.taskflow_api.controllers;
 
+import com.nicolasmartineli.taskflow_api.dtos.ProjectResponse;
 import com.nicolasmartineli.taskflow_api.dtos.TeamCreateRequest;
 import com.nicolasmartineli.taskflow_api.dtos.TeamResponse;
 import com.nicolasmartineli.taskflow_api.dtos.TeamUpdateRequest;
+import com.nicolasmartineli.taskflow_api.services.ProjectService;
 import com.nicolasmartineli.taskflow_api.services.TeamService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +23,7 @@ import java.util.UUID;
 public class TeamController implements LocationHeaderUriBuilder {
 
     private final TeamService service;
+    private final ProjectService projectService;
 
     @PostMapping
     public ResponseEntity<Void> create(@RequestBody @Valid TeamCreateRequest team) {
@@ -49,6 +55,18 @@ public class TeamController implements LocationHeaderUriBuilder {
         service.delete(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{teamId}/projects")
+    public ResponseEntity<Page<ProjectResponse>> findProjectsByTeamId(
+            @PathVariable UUID teamId,
+            @PageableDefault(size = 10, page = 0, sort = "name") Pageable pageable) {
+
+        Page<ProjectResponse> project = projectService.findByTeamId(teamId, pageable);
+
+        return ResponseEntity.ok(project);
+
+
     }
 
 }
