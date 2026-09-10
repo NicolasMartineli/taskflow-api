@@ -10,6 +10,7 @@ import com.nicolasmartineli.taskflow_api.models.Team;
 import com.nicolasmartineli.taskflow_api.repositories.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -39,6 +40,7 @@ public class TeamService {
 
     }
 
+    @Transactional
     public TeamResponse update(UUID id, TeamUpdateRequest request) {
         Team team = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Team not found with id: " + id));
 
@@ -53,6 +55,7 @@ public class TeamService {
         return mapper.toResponse(team);
     }
 
+    @Transactional
     public void delete(UUID id) {
         Team team = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Team not found with id: " + id));
 

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.UUID;
@@ -25,6 +26,7 @@ public class UserService {
     private final UserMapper mapper;
     private final UserRepository repository;
 
+    @Transactional
     public UserResponse create(UserCreateRequest request) {
 
         if (repository.existsByEmail(request.email())) {
@@ -39,6 +41,7 @@ public class UserService {
 
     }
 
+    @Transactional
     public UserResponse findById(UUID id) {
         User user = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
@@ -46,6 +49,7 @@ public class UserService {
         return mapper.toResponse(user);
     }
 
+    @Transactional
     public Page<UserResponse> findByNameAndEmail(String name, String email, Pageable pageable) {
 
         Specification<User> specs = Specification.where((UserSpec.nameLike(name)).and(UserSpec.emailLike(email)));
@@ -54,6 +58,7 @@ public class UserService {
 
     }
 
+    @Transactional
     public UserResponse update(UUID id, UserUpdateRequest request) {
 
         User user = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
@@ -69,6 +74,7 @@ public class UserService {
         return mapper.toResponse(user);
     }
 
+    @Transactional
     public void delete(UUID id) {
 
         User user = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));

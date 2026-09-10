@@ -14,6 +14,7 @@ import com.nicolasmartineli.taskflow_api.repositories.TeamRepository;
 import com.nicolasmartineli.taskflow_api.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -27,6 +28,7 @@ public class TeamMembershipService {
     private final UserRepository userRepository;
     private final TeamRepository teamRepository;
 
+    @Transactional
     public void addMember(UUID teamId, TeamMembershipCreateRequest request) {
 
         if (membershipRepository.existsByTeamIdAndUserId(teamId, request.userId())) {
@@ -45,7 +47,7 @@ public class TeamMembershipService {
         membershipRepository.save(membership);
 
     }
-
+    @Transactional
     public void removeMember(UUID teamId, UUID idUser) {
         TeamMembership membership = membershipRepository.findByTeamIdAndUserId(teamId, idUser)
                 .orElseThrow(() -> new ResourceNotFoundException("Team or user not found with id"));
