@@ -17,8 +17,5 @@ public interface TeamMemberShipMapper {
     @Mapping(target = "roleInTeam", source = "teamMembershipCreateRequest.roleInTeam")
     @Mapping(target = "team", source = "team")
     @Mapping(target = "user", source = "user")
-    TeamMembership toEntity(
-            TeamMembershipCreateRequest teamMembershipCreateRequest,
-            Team team,
-            User user);
+    TeamMembership toEntity(TeamMembershipCreateRequest teamMembershipCreateRequest, Team team, User user);
 }

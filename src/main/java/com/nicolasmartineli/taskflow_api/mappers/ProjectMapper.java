@@ -2,6 +2,7 @@ package com.nicolasmartineli.taskflow_api.mappers;
 
 import com.nicolasmartineli.taskflow_api.dtos.project.ProjectCreateRequest;
 import com.nicolasmartineli.taskflow_api.dtos.project.ProjectResponse;
+import com.nicolasmartineli.taskflow_api.dtos.project.ProjectSummary;
 import com.nicolasmartineli.taskflow_api.dtos.project.ProjectUpdateRequest;
 import com.nicolasmartineli.taskflow_api.models.Project;
 import org.mapstruct.Mapper;
@@ -26,5 +27,5 @@ public interface ProjectMapper {
     @Mapping(target = "team", ignore = true)
     void updateEntityFromRequest(ProjectUpdateRequest projectUpdateRequest, @MappingTarget Project project);
 
-
+    ProjectSummary toSummary(Project project);
 }
