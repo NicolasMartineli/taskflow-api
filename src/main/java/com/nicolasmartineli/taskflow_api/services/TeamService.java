@@ -1,8 +1,8 @@
 package com.nicolasmartineli.taskflow_api.services;
 
-import com.nicolasmartineli.taskflow_api.dtos.TeamCreateRequest;
-import com.nicolasmartineli.taskflow_api.dtos.TeamResponse;
-import com.nicolasmartineli.taskflow_api.dtos.TeamUpdateRequest;
+import com.nicolasmartineli.taskflow_api.dtos.team.TeamCreateRequest;
+import com.nicolasmartineli.taskflow_api.dtos.team.TeamResponse;
+import com.nicolasmartineli.taskflow_api.dtos.team.TeamUpdateRequest;
 import com.nicolasmartineli.taskflow_api.exceptions.DuplicateResourceException;
 import com.nicolasmartineli.taskflow_api.exceptions.ResourceNotFoundException;
 import com.nicolasmartineli.taskflow_api.mappers.TeamMapper;

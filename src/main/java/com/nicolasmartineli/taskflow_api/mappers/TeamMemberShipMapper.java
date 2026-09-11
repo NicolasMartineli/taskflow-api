@@ -1,6 +1,6 @@
 package com.nicolasmartineli.taskflow_api.mappers;
 
-import com.nicolasmartineli.taskflow_api.dtos.TeamMembershipCreateRequest;
+import com.nicolasmartineli.taskflow_api.dtos.teammembership.TeamMembershipCreateRequest;
 import com.nicolasmartineli.taskflow_api.models.Team;
 import com.nicolasmartineli.taskflow_api.models.TeamMembership;
 import com.nicolasmartineli.taskflow_api.models.User;

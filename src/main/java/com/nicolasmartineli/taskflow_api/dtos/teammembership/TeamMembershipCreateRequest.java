@@ -1,4 +1,4 @@
-package com.nicolasmartineli.taskflow_api.dtos;
+package com.nicolasmartineli.taskflow_api.dtos.teammembership;
 
 import com.nicolasmartineli.taskflow_api.models.enums.TeamRole;
 import jakarta.validation.constraints.NotNull;

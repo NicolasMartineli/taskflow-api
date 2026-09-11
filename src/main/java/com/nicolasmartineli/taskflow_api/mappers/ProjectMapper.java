@@ -1,8 +1,8 @@
 package com.nicolasmartineli.taskflow_api.mappers;
 
-import com.nicolasmartineli.taskflow_api.dtos.ProjectCreateRequest;
-import com.nicolasmartineli.taskflow_api.dtos.ProjectResponse;
-import com.nicolasmartineli.taskflow_api.dtos.ProjectUpdateRequest;
+import com.nicolasmartineli.taskflow_api.dtos.project.ProjectCreateRequest;
+import com.nicolasmartineli.taskflow_api.dtos.project.ProjectResponse;
+import com.nicolasmartineli.taskflow_api.dtos.project.ProjectUpdateRequest;
 import com.nicolasmartineli.taskflow_api.models.Project;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

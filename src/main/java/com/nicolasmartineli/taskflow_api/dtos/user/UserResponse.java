@@ -1,4 +1,4 @@
-package com.nicolasmartineli.taskflow_api.dtos;
+package com.nicolasmartineli.taskflow_api.dtos.user;
 
 import com.nicolasmartineli.taskflow_api.models.enums.UserRole;
 import java.util.UUID;

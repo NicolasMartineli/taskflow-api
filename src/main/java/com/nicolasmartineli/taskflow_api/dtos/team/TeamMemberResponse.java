@@ -1,4 +1,4 @@
-package com.nicolasmartineli.taskflow_api.dtos;
+package com.nicolasmartineli.taskflow_api.dtos.team;
 
 import com.nicolasmartineli.taskflow_api.models.enums.TeamRole;
 

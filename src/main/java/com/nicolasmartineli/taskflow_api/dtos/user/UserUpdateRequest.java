@@ -1,4 +1,4 @@
-package com.nicolasmartineli.taskflow_api.dtos;
+package com.nicolasmartineli.taskflow_api.dtos.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

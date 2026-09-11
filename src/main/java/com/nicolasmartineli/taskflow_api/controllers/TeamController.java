@@ -1,9 +1,9 @@
 package com.nicolasmartineli.taskflow_api.controllers;
 
-import com.nicolasmartineli.taskflow_api.dtos.ProjectResponse;
-import com.nicolasmartineli.taskflow_api.dtos.TeamCreateRequest;
-import com.nicolasmartineli.taskflow_api.dtos.TeamResponse;
-import com.nicolasmartineli.taskflow_api.dtos.TeamUpdateRequest;
+import com.nicolasmartineli.taskflow_api.dtos.project.ProjectResponse;
+import com.nicolasmartineli.taskflow_api.dtos.team.TeamCreateRequest;
+import com.nicolasmartineli.taskflow_api.dtos.team.TeamResponse;
+import com.nicolasmartineli.taskflow_api.dtos.team.TeamUpdateRequest;
 import com.nicolasmartineli.taskflow_api.services.ProjectService;
 import com.nicolasmartineli.taskflow_api.services.TeamService;
 import jakarta.validation.Valid;

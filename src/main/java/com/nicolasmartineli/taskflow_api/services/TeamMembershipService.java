@@ -1,6 +1,6 @@
 package com.nicolasmartineli.taskflow_api.services;
 
-import com.nicolasmartineli.taskflow_api.dtos.TeamMembershipCreateRequest;
+import com.nicolasmartineli.taskflow_api.dtos.teammembership.TeamMembershipCreateRequest;
 import com.nicolasmartineli.taskflow_api.exceptions.BusinessRuleException;
 import com.nicolasmartineli.taskflow_api.exceptions.DuplicateResourceException;
 import com.nicolasmartineli.taskflow_api.exceptions.ResourceNotFoundException;
@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

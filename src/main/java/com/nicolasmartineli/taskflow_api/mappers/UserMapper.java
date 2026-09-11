@@ -1,8 +1,8 @@
 package com.nicolasmartineli.taskflow_api.mappers;
 
-import com.nicolasmartineli.taskflow_api.dtos.UserCreateRequest;
-import com.nicolasmartineli.taskflow_api.dtos.UserResponse;
-import com.nicolasmartineli.taskflow_api.dtos.UserUpdateRequest;
+import com.nicolasmartineli.taskflow_api.dtos.user.UserCreateRequest;
+import com.nicolasmartineli.taskflow_api.dtos.user.UserResponse;
+import com.nicolasmartineli.taskflow_api.dtos.user.UserUpdateRequest;
 import com.nicolasmartineli.taskflow_api.models.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;

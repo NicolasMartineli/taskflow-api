@@ -1,6 +1,6 @@
 package com.nicolasmartineli.taskflow_api.controllers;
 
-import com.nicolasmartineli.taskflow_api.dtos.TeamMembershipCreateRequest;
+import com.nicolasmartineli.taskflow_api.dtos.teammembership.TeamMembershipCreateRequest;
 import com.nicolasmartineli.taskflow_api.services.TeamMembershipService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

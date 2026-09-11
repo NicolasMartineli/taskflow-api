@@ -1,8 +1,8 @@
 package com.nicolasmartineli.taskflow_api.controllers;
 
-import com.nicolasmartineli.taskflow_api.dtos.UserCreateRequest;
-import com.nicolasmartineli.taskflow_api.dtos.UserResponse;
-import com.nicolasmartineli.taskflow_api.dtos.UserUpdateRequest;
+import com.nicolasmartineli.taskflow_api.dtos.user.UserCreateRequest;
+import com.nicolasmartineli.taskflow_api.dtos.user.UserResponse;
+import com.nicolasmartineli.taskflow_api.dtos.user.UserUpdateRequest;
 import com.nicolasmartineli.taskflow_api.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
