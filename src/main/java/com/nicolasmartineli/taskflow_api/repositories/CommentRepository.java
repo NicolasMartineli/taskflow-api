@@ -11,4 +11,5 @@ import java.util.UUID;
 public interface CommentRepository extends JpaRepository<Comment, UUID> {
 
     List<Comment> findByTaskId(UUID taskId);
+    void deleteByTaskId(UUID taskId);
 }

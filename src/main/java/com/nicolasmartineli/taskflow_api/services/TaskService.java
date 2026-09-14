@@ -11,10 +11,7 @@ import com.nicolasmartineli.taskflow_api.models.Task;
 import com.nicolasmartineli.taskflow_api.models.User;
 import com.nicolasmartineli.taskflow_api.models.enums.TaskPriority;
 import com.nicolasmartineli.taskflow_api.models.enums.TaskStatus;
-import com.nicolasmartineli.taskflow_api.repositories.ProjectRepository;
-import com.nicolasmartineli.taskflow_api.repositories.TaskRepository;
-import com.nicolasmartineli.taskflow_api.repositories.TeamMembershipRepository;
-import com.nicolasmartineli.taskflow_api.repositories.UserRepository;
+import com.nicolasmartineli.taskflow_api.repositories.*;
 import com.nicolasmartineli.taskflow_api.repositories.specs.TaskSpec;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,6 +31,7 @@ public class TaskService {
     private final TeamMembershipRepository teamMembershipRepository;
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public TaskResponse create(TaskCreateRequest request) {
@@ -95,6 +93,8 @@ public class TaskService {
     @Transactional
     public void delete(UUID id) {
         Task task = taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
+
+        commentRepository.deleteByTaskId(id);
 
         taskRepository.delete(task);
 
