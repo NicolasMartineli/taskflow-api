@@ -30,10 +30,10 @@ Personal project developed to apply hands-on concepts studied in the *Spring Boo
 
 ## Roadmap
 
-- [ ] Database modeling
-- [ ] CRUD operations for entities (User, Team, Project, Task, Comment)
-- [ ] Bean Validation and exception handling
-- [ ] Filtering with Specifications
+- [x] Database modeling
+- [x] CRUD operations for entities (User, Team, Project, Task, Comment)
+- [x] Bean Validation and exception handling
+- [x] Filtering with Specifications
 - [ ] Authentication and authorization (Spring Security + JWT)
 - [ ] OAuth2
 - [ ] Documentation with Swagger/OpenAPI
