@@ -27,6 +27,9 @@ public class Task extends BaseEntity {
     @Column(name = "status", nullable = false)
     private TaskStatus status;
 
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "priority", nullable = false)
     private TaskPriority priority;
