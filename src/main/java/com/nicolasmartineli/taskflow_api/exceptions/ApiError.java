@@ -16,6 +16,9 @@ public record ApiError(Integer status, String message, List<ErrorField> errors) 
 
     public static ApiError unprocessableEntity(String message, List<ErrorField> errors) {
         return new ApiError(HttpStatus.UNPROCESSABLE_ENTITY.value(), message, errors);
+    }
 
+    public static ApiError unauthorized(String message) {
+        return new ApiError(HttpStatus.UNAUTHORIZED.value(), message, List.of());
     }
 }

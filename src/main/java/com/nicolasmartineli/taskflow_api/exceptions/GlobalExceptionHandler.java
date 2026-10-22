@@ -1,14 +1,14 @@
 package com.nicolasmartineli.taskflow_api.exceptions;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
-
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -35,7 +35,6 @@ public class GlobalExceptionHandler {
 
         return ApiError.unprocessableEntity("Validation error", errors);
 
-
     }
 
     @ExceptionHandler(BusinessRuleException.class)
@@ -43,6 +42,13 @@ public class GlobalExceptionHandler {
     public ApiError handleBusinessRuleException(BusinessRuleException e) {
 
         return ApiError.conflict(e.getMessage());
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiError handleBadCredentials(BadCredentialsException e) {
+
+        return ApiError.unauthorized(e.getMessage());
     }
 
 }
