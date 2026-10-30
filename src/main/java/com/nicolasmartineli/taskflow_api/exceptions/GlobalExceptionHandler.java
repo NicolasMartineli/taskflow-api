@@ -6,7 +6,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 
@@ -47,8 +46,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ApiError handleBadCredentials(BadCredentialsException e) {
-
-        return ApiError.unauthorized(e.getMessage());
+        return ApiError.unauthorized("Invalid  credentials");
     }
 
 }
