@@ -28,7 +28,7 @@ public class CommentService {
     private final TeamMembershipRepository teamMembershipRepository;
     private final CommentMapper mapper;
     private final TaskRepository taskRepository;
-    private final UserRepository userRepository;
+    private final CurrentUserService currentUserService;
 
     @Transactional
     public CommentResponse create(UUID taskId, CommentCreateRequest request) {
@@ -38,12 +38,11 @@ public class CommentService {
         UUID teamId = task.getProject().getTeam().getId();
 
 
-        if (!teamMembershipRepository.existsByTeamIdAndUserId(teamId, request.authorId())) {
+        if (!teamMembershipRepository.existsByTeamIdAndUserId(teamId, currentUserService.getCurrentUserId())) {
             throw new BusinessRuleException("Only team members can comment on tasks");
         }
 
-        User author = userRepository.findById(request.authorId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + request.authorId()));
+        User author = currentUserService.getCurrentUser();
 
         Comment comment = mapper.toEntity(request);
         comment.setTask(task);
