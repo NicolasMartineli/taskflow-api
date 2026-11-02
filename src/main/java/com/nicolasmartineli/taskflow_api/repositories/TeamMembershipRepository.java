@@ -5,15 +5,20 @@ import com.nicolasmartineli.taskflow_api.models.enums.TeamRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface TeamMembershipRepository extends JpaRepository<TeamMembership, UUID> {
 
-    boolean existsByTeamIdAndUserId(UUID teamId,UUID userId);
+    boolean existsByTeamIdAndUserId(UUID teamId, UUID userId);
 
     Optional<TeamMembership> findByTeamIdAndUserId(UUID teamId, UUID userId);
 
     long countByTeamIdAndRoleInTeam(UUID teamId, TeamRole roleInTeam);
+
+    List<TeamMembership> findByTeamId(UUID teamId);
+
+    void deleteByTeamId(UUID teamId);
 }

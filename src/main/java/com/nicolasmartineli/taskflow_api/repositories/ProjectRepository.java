@@ -16,4 +16,6 @@ public interface ProjectRepository extends JpaRepository<Project, UUID> {
     Page<Project> findByTeamId(UUID teamId, Pageable pageable);
 
     boolean existsByNameAndTeamIdAndIdNot(String name, UUID teamId, UUID id);
+
+    boolean existsByTeamId(UUID teamId);
 }
