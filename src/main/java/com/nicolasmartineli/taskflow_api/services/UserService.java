@@ -27,6 +27,7 @@ public class UserService {
     private final UserMapper mapper;
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
+    private final TeamAccessService teamAccessService;
 
     @Transactional
     public UserResponse create(UserCreateRequest request) {
@@ -65,6 +66,7 @@ public class UserService {
     @Transactional
     public UserResponse update(UUID id, UserUpdateRequest request) {
 
+        teamAccessService.checkSelfAccess(id);
         User user = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         if (!user.getEmail().equals(request.email()) && repository.existsByEmail(request.email())) {
@@ -80,6 +82,8 @@ public class UserService {
 
     @Transactional
     public void delete(UUID id) {
+
+        teamAccessService.checkSelfAccess(id);
 
         User user = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 

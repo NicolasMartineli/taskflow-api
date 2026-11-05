@@ -26,10 +26,12 @@ public class TeamMembershipService {
     private final TeamMembershipRepository membershipRepository;
     private final UserRepository userRepository;
     private final TeamRepository teamRepository;
+    private TeamAccessService teamAccessService;
 
     @Transactional
     public void addMember(UUID teamId, TeamMembershipCreateRequest request) {
 
+        teamAccessService.checkAdmin(teamId);
         if (membershipRepository.existsByTeamIdAndUserId(teamId, request.userId())) {
             throw new DuplicateResourceException("TeamMembership", "userId", request.userId());
 
@@ -48,6 +50,8 @@ public class TeamMembershipService {
     }
     @Transactional
     public void removeMember(UUID teamId, UUID idUser) {
+
+        teamAccessService.checkAdmin(teamId);
         TeamMembership membership = membershipRepository.findByTeamIdAndUserId(teamId, idUser)
                 .orElseThrow(() -> new ResourceNotFoundException("Team or user not found with id"));
 

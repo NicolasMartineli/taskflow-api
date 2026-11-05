@@ -20,6 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -32,12 +33,15 @@ public class TaskService {
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final TeamAccessService teamAccessService;
+    private final CurrentUserService currentUserService;
 
     @Transactional
     public TaskResponse create(TaskCreateRequest request) {
         Project project = projectRepository.findById(request.projectId())
                 .orElseThrow(() -> new ResourceNotFoundException("Project not found with id: " + request.projectId()));
 
+        teamAccessService.checkMember(project.getTeam().getId());
 
         validateAssignee(request.assigneeId(), project.getTeam().getId());
 
@@ -55,7 +59,6 @@ public class TaskService {
         }
 
         return mapper.toResponse(taskRepository.save(task));
-
     }
 
     public void validateAssignee(UUID assigneId, UUID teamId) {
@@ -64,17 +67,22 @@ public class TaskService {
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public TaskResponse findById(UUID id) {
-        Task task = taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
 
+        teamAccessService.checkMember(task.getProject().getTeam().getId());
 
         return mapper.toResponse(task);
     }
 
     @Transactional
     public TaskResponse update(UUID id, TaskUpdateRequest request) {
-        Task task = taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
+
+        teamAccessService.checkMember(task.getProject().getTeam().getId());
 
         if (request.assigneeId() != null) {
             validateAssignee(request.assigneeId(), task.getProject().getTeam().getId());
@@ -87,21 +95,33 @@ public class TaskService {
         mapper.updateEntityFromRequest(request, task);
 
         return mapper.toResponse(taskRepository.save(task));
-
     }
 
     @Transactional
     public void delete(UUID id) {
-        Task task = taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
 
+        teamAccessService.checkAdmin(task.getProject().getTeam().getId());
         commentRepository.deleteByTaskId(id);
 
         taskRepository.delete(task);
-
     }
 
     @Transactional(readOnly = true)
     public Page<TaskResponse> findAll(UUID projectId, TaskStatus status, TaskPriority priority, UUID assigneeId, Pageable pageable) {
+
+        if (projectId != null) {
+            Project project = projectRepository.findById(projectId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Project not found with id: " + projectId));
+            teamAccessService.checkMember(project.getTeam().getId());
+        } else {
+            User currentUser = currentUserService.getCurrentUser();
+            List<UUID> userTeamIds = teamMembershipRepository.findByUserId(currentUser.getId())
+                    .stream()
+                    .map(membership -> membership.getTeam().getId())
+                    .toList();
+        }
 
         Specification<Task> specs = Specification.where
                         (TaskSpec.assigneeIdEquals(assigneeId))

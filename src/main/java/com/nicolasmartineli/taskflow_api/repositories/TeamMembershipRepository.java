@@ -21,4 +21,6 @@ public interface TeamMembershipRepository extends JpaRepository<TeamMembership, 
     List<TeamMembership> findByTeamId(UUID teamId);
 
     void deleteByTeamId(UUID teamId);
+
+    List<TeamMembership> findByUserId(UUID userId);
 }

@@ -25,11 +25,14 @@ public class ProjectService {
     private final TeamRepository teamRepository;
     private final ProjectMapper mapper;
     private final ProjectRepository repository;
+    private final TeamAccessService teamAccessService;
 
     @Transactional
     public ProjectResponse create(ProjectCreateRequest request) {
         Team team = teamRepository.findById(request.teamId())
                 .orElseThrow(() -> new ResourceNotFoundException("Team not found with id: " + request.teamId()));
+
+        teamAccessService.checkMember(team.getId());
 
         if (repository.existsByNameAndTeamId(request.name(), request.teamId())) {
             throw new DuplicateResourceException("Project", "name", request.name());
@@ -50,14 +53,14 @@ public class ProjectService {
         Project project = repository.findById(idProject)
                 .orElseThrow(() -> new ResourceNotFoundException("Project not found with id: " + idProject));
 
+        teamAccessService.checkMember(project.getTeam().getId());
+
         return mapper.toResponse(project);
     }
 
     @Transactional
     public Page<ProjectResponse> findByTeamId(UUID teamId, Pageable pageable) {
-        if (!teamRepository.existsById(teamId)) {
-            throw new ResourceNotFoundException("Team not found with id: " + teamId);
-        }
+        teamAccessService.checkMember(teamId);
 
         return repository.findByTeamId(teamId, pageable).map(mapper::toResponse);
 
@@ -68,6 +71,8 @@ public class ProjectService {
 
         Project project = repository.findById(idProject)
                 .orElseThrow(() -> new ResourceNotFoundException("Project not found with id: " + idProject));
+
+        teamAccessService.checkMember(project.getTeam().getId());
 
         if (repository.existsByNameAndTeamIdAndIdNot(request.name(), project.getTeam().getId(), idProject)) {
             throw new DuplicateResourceException("Project", "name", request.name());
@@ -85,6 +90,7 @@ public class ProjectService {
         Project project = repository.findById(idProject)
                 .orElseThrow(() -> new ResourceNotFoundException("Project not found with id: " + idProject));
 
+        teamAccessService.checkAdmin(project.getTeam().getId());
         repository.delete(project);
     }
 }

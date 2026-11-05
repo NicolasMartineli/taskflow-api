@@ -30,6 +30,7 @@ public class TeamService {
     private final CurrentUserService currentUserService;
     private final TeamMembershipRepository teamMembershipRepository;
     private final ProjectRepository projectRepository;
+    private final TeamAccessService teamAccessService;
 
     @Transactional
     public TeamResponse create(TeamCreateRequest request) {
@@ -59,6 +60,8 @@ public class TeamService {
     public TeamResponse update(UUID id, TeamUpdateRequest request) {
         Team team = findTeamOrThrow(id);
 
+        teamAccessService.checkAdmin(team.getId());
+
         if (!team.getName().equals(request.name()) && repository.existsByName(request.name())) {
             throw new DuplicateResourceException("Team", "name", request.name());
         }
@@ -72,6 +75,8 @@ public class TeamService {
     public void delete(UUID id) {
         Team team = findTeamOrThrow(id);
 
+        teamAccessService.checkAdmin(team.getId());
+
         if (projectRepository.existsByTeamId(id)) {
             throw new BusinessRuleException("Cannot delete a team that still has projects");
         }
@@ -81,8 +86,12 @@ public class TeamService {
     }
 
     private Team findTeamOrThrow(UUID id) {
-        return repository.findById(id)
+        Team team = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Team not found with id: " + id));
+
+        teamAccessService.checkMember(team.getId());
+
+        return team;
     }
 
     private TeamResponse toResponse(Team team) {

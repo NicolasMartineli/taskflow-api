@@ -11,14 +11,12 @@ import com.nicolasmartineli.taskflow_api.models.User;
 import com.nicolasmartineli.taskflow_api.repositories.CommentRepository;
 import com.nicolasmartineli.taskflow_api.repositories.TaskRepository;
 import com.nicolasmartineli.taskflow_api.repositories.TeamMembershipRepository;
-import com.nicolasmartineli.taskflow_api.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +27,7 @@ public class CommentService {
     private final CommentMapper mapper;
     private final TaskRepository taskRepository;
     private final CurrentUserService currentUserService;
+    private final TeamAccessService teamAccessService;
 
     @Transactional
     public CommentResponse create(UUID taskId, CommentCreateRequest request) {
@@ -37,7 +36,7 @@ public class CommentService {
 
         UUID teamId = task.getProject().getTeam().getId();
 
-
+        teamAccessService.checkMember(teamId);
         if (!teamMembershipRepository.existsByTeamIdAndUserId(teamId, currentUserService.getCurrentUserId())) {
             throw new BusinessRuleException("Only team members can comment on tasks");
         }
@@ -53,9 +52,10 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public List<CommentResponse> findByTaskId(UUID id) {
-        if (!taskRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Task not found with id: " + id);
-        }
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
+
+        teamAccessService.checkMember(task.getProject().getTeam().getId());
 
         return commentRepository.findByTaskId(id).stream().map(mapper::toResponse).toList();
 
@@ -63,9 +63,18 @@ public class CommentService {
 
     @Transactional
     public void delete(UUID id) {
-
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Comment not found with id: " + id));
+
+        User currentUser = currentUserService.getCurrentUser();
+        UUID teamId = comment.getTask().getProject().getTeam().getId();
+
+        boolean isAuthor = comment.getAuthor().getId().equals(currentUser.getId());
+        boolean isAdmin = teamAccessService.isTeamAdmin(teamId);
+
+        if (!isAuthor && !isAdmin) {
+            throw new ResourceNotFoundException("Comment not found with id: " + id);
+        }
 
         commentRepository.delete(comment);
     }
