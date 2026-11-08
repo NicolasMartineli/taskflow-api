@@ -26,7 +26,7 @@ public class TeamMembershipService {
     private final TeamMembershipRepository membershipRepository;
     private final UserRepository userRepository;
     private final TeamRepository teamRepository;
-    private TeamAccessService teamAccessService;
+    private final TeamAccessService teamAccessService;
 
     @Transactional
     public void addMember(UUID teamId, TeamMembershipCreateRequest request) {

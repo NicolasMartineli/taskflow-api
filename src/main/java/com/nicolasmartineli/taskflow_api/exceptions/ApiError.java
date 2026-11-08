@@ -21,4 +21,8 @@ public record ApiError(Integer status, String message, List<ErrorField> errors) 
     public static ApiError unauthorized(String message) {
         return new ApiError(HttpStatus.UNAUTHORIZED.value(), message, List.of());
     }
+
+    public static ApiError forbidden(String message) {
+        return new ApiError(HttpStatus.FORBIDDEN.value(), message, List.of());
+    }
 }

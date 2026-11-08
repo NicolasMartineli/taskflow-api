@@ -16,18 +16,18 @@ public class TeamAccessService {
     private final TeamMembershipRepository teamMembershipRepository;
     private final CurrentUserService currentUserService;
 
-    public Boolean isMember(UUID teamId) {
+    public boolean isMember(UUID teamId) {
         User user = currentUserService.getCurrentUser();
         return teamMembershipRepository.existsByTeamIdAndUserId(teamId, user.getId());
 
     }
     public void checkMember(UUID teamId){
         if(!isMember(teamId)){
-            throw new ResourceNotFoundException("You don't have access to this team.");
+            throw new ResourceNotFoundException("Team not found with id: " + teamId);
         }
     }
 
-    public Boolean isTeamAdmin(UUID teamId){
+    public boolean isTeamAdmin(UUID teamId){
         User user = currentUserService.getCurrentUser();
         return teamMembershipRepository.findByTeamIdAndUserId(teamId, user.getId())
                 .map(m -> m.getRoleInTeam() == TeamRole.ADMIN)
