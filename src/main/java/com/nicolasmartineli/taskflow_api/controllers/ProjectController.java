@@ -50,7 +50,7 @@ public class ProjectController implements LocationHeaderUriBuilder {
     @ApiResponse(responseCode = "200", description = "Project found")
     @ApiResponse(responseCode = "404", description = "Project not found",
             content = @Content(schema = @Schema(implementation = ApiError.class)))
-    public ResponseEntity<ProjectResponse> findByID(@PathVariable UUID id) {
+    public ResponseEntity<ProjectResponse> findById(@PathVariable UUID id) {
         ProjectResponse project = service.findById(id);
 
         return ResponseEntity.ok(project);

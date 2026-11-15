@@ -90,6 +90,7 @@ public class TeamController implements LocationHeaderUriBuilder {
     }
 
     @GetMapping("/{teamId}/projects")
+    @Tag(name = "Projects")
     @Operation(summary = "List projects by team ID",
             description = "Returns a paginated list of projects belonging to the specified team")
     @ApiResponse(responseCode = "200", description = "Projects retrieved")

@@ -119,11 +119,11 @@ public class TaskController implements LocationHeaderUriBuilder {
     @ApiResponse(responseCode = "422", description = "Validation error",
             content = @Content(schema = @Schema(implementation = ApiError.class)))
     public ResponseEntity<Void> addComment(@PathVariable UUID taskId, @Valid @RequestBody CommentCreateRequest request) {
-        CommentResponse comment = commentService.create(taskId, request);
+        commentService.create(taskId, request);
 
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/comments/{id}")
-                .buildAndExpand(comment.id())
+                .path("/tasks/{taskId}/comments")
+                .buildAndExpand(taskId)
                 .toUri();
 
         return ResponseEntity.created(location).build();
