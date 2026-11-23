@@ -2,6 +2,10 @@ spring:
   application:
     name: taskflow-api
 
+  output:
+    ansi:
+      enabled: always
+
   datasource:
     url: jdbc:postgresql://localhost:5432/taskflow_db
     username: postgres
@@ -15,7 +19,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    dialect: org.hibernate.dialect.PostgreSQLDialect
 
 security:
   jwt:
@@ -38,3 +41,6 @@ logging:
     com.nicolasmartineli.taskflow_api: DEBUG
     org.springframework.security: INFO
     org.hibernate.SQL: DEBUG
+  pattern:
+    console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr(%5p) %clr(%-30.30logger{29}){cyan} : %m%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %-40.40logger{39} : %m%n"
