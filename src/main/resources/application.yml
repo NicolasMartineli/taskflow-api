@@ -24,3 +24,12 @@ security:
 
 springdoc:
   override-with-generic-response: false
+
+logging:
+  file:
+    name: logs/taskflow-api.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 7
+      total-size-cap: 100MB
