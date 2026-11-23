@@ -1,6 +1,6 @@
 # TaskFlow API
 
-REST API for team task management: organize teams, projects, tasks and comments in one place, with real business rules, JWT authentication, centralized role-based authorization (RBAC), dynamic filtering and standardized error responses.
+REST API for team task management: organize teams, projects, tasks and comments in one place, with real business rules, JWT authentication, centralized role-based authorization (RBAC), interactive OpenAPI documentation, dynamic filtering and standardized error responses.
 
 ## About the Project
 
@@ -8,13 +8,14 @@ TaskFlow is a backend project built to practice, in a realistic scenario, the de
 
 Users create **teams**, invite other users as members with a per-team role (`ADMIN` or `MEMBER`), organize work in **projects**, track **tasks** with status, priority and assignee, and discuss them through **comments**. Access rules depend on team membership (for example, a user can be an `ADMIN` in one team and a `MEMBER` in another), enforcing robust domain-level authorization.
 
-**Current status:** Core API operations, stateless JWT authentication, centralized RBAC authorization, and exception handling are fully implemented and verified.
+**Current status:** Core API operations, stateless JWT authentication, centralized RBAC authorization, exception handling and interactive API documentation (Swagger UI) are fully implemented and verified.
 
 ## Tech Stack
 
 - Java 17+
 - Spring Boot (Web, Data JPA, Validation)
-- Spring Security (BCrypt, JWT with OAuth2 Resource Server / Custom Filters)
+- Spring Security (BCrypt, JWT with OAuth2 Resource Server)
+- springdoc-openapi (Swagger UI)
 - PostgreSQL
 - MapStruct and Lombok
 - Docker / Docker Compose (database and pgAdmin)
@@ -67,6 +68,7 @@ Users create **teams**, invite other users as members with a per-team role (`ADM
 
 - **Stateless Authentication**: Login endpoint issuing JWT tokens signed with HS256 and BCrypt password hashing.
 - **Centralized Service-Layer Authorization**: Enforced via `TeamAccessService` with a strict find-then-check pattern across all domain operations.
+- **Interactive API Documentation**: OpenAPI specification and Swagger UI with Bearer token authentication, grouped endpoints and documented response codes.
 - **Dynamic Filtering & Pagination**: Powered by Spring Data JPA `Specification` (users by name/email; tasks by project, status, priority, and assignee).
 - **Data Encapsulation**: DTOs implemented as Java records; domain entities are mapped using MapStruct and never exposed directly.
 - **Auto-Association**: Team creation automatically binds the logged-in user as team `ADMIN`; comment authors are extracted automatically from the security context.
@@ -74,7 +76,7 @@ Users create **teams**, invite other users as members with a per-team role (`ADM
 
 ## Authentication
 
-Only two endpoints are public: `POST /users` (sign up) and `POST /auth/login`. Every other endpoint requires a valid JWT Bearer token.
+Only two API endpoints are public: `POST /users` (sign up) and `POST /auth/login`. Every other endpoint requires a valid JWT Bearer token. The documentation pages (Swagger UI and the OpenAPI specification) are also publicly accessible.
 
 ### Login Request
 
@@ -106,6 +108,21 @@ Authorization: Bearer <accessToken>
 
 - Tokens expire after 60 minutes by default (`expiresIn` is in seconds).
 - Invalid credentials return `401 Unauthorized` with a generic `Invalid credentials` message to prevent account enumeration.
+
+## API Documentation
+
+The API is documented with OpenAPI 3 and exposed through Swagger UI:
+
+| Resource | URL |
+|---|---|
+| Swagger UI | `http://localhost:8080/swagger-ui.html` |
+| OpenAPI specification (JSON) | `http://localhost:8080/v3/api-docs` |
+
+To try the protected endpoints from Swagger UI:
+
+1. Call `POST /auth/login` and copy the `accessToken` from the response.
+2. Click **Authorize**, paste **only the token** (without the `Bearer ` prefix) and confirm.
+3. Every request sent from the page now includes the `Authorization` header.
 
 ## API Overview
 
@@ -160,14 +177,14 @@ All errors return a standardized JSON structure:
 
 ```
 src/main/java/com/nicolasmartineli/taskflow_api
-├── configs        # Spring configuration (Security, JWT, Beans)
+├── configs        # Spring configuration (Security, JWT, OpenAPI, Beans)
 ├── controllers    # REST Controllers
 ├── dtos           # Request/Response DTO records
 ├── exceptions     # Custom business exceptions & GlobalExceptionHandler
 ├── mappers        # MapStruct mapping interfaces
 ├── models         # JPA entities and Enums
 ├── repositories   # Spring Data Repositories & Specifications
-├── security       # Auth filters, CurrentUserService & SecurityErrorHandler
+├── security       # JWT, CurrentUserService & SecurityErrorHandler
 └── services       # Business logic & authorization checks (TeamAccessService)
 ```
 
@@ -207,6 +224,9 @@ src/main/java/com/nicolasmartineli/taskflow_api
    ```
    The API will start at `http://localhost:8080`.
 
+5. **Explore the API:**
+   Open Swagger UI at `http://localhost:8080/swagger-ui.html`.
+
 ## Roadmap
 
 - [x] Database modeling & N:N associative tables
@@ -215,13 +235,13 @@ src/main/java/com/nicolasmartineli/taskflow_api
 - [x] Dynamic filtering & pagination using Spring Data JPA `Specification`
 - [x] PostgreSQL & pgAdmin setup via Docker Compose
 - [x] Authentication & Authorization (Spring Security + JWT)
-  - [x] BCrypt password hashing
-  - [x] Custom `UserDetailsService` implementation
-  - [x] Token generation & authentication endpoints
-  - [x] Stateless route protection
-  - [x] Per-team authorization layer (`TeamAccessService`)
-  - [x] Standardized 401, 403, and 404 security responses
-- [ ] Documentation with Swagger / OpenAPI
+    - [x] BCrypt password hashing
+    - [x] Custom `UserDetailsService` implementation
+    - [x] Token generation & authentication endpoints
+    - [x] Stateless route protection
+    - [x] Per-team authorization layer (`TeamAccessService`)
+    - [x] Standardized 401, 403, and 404 security responses
+- [x] Documentation with Swagger / OpenAPI
 - [ ] Observability & Metrics (Spring Boot Actuator & Micrometer)
 - [ ] Application containerization (Dockerfile)
 - [ ] Cloud Deployment (AWS)
