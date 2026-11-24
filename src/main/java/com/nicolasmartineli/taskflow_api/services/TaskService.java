@@ -14,6 +14,7 @@ import com.nicolasmartineli.taskflow_api.models.enums.TaskStatus;
 import com.nicolasmartineli.taskflow_api.repositories.*;
 import com.nicolasmartineli.taskflow_api.repositories.specs.TaskSpec;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -25,6 +26,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TaskService {
 
     private final TaskRepository taskRepository;
@@ -58,7 +60,11 @@ public class TaskService {
             task.setStatus(TaskStatus.TODO);
         }
 
-        return mapper.toResponse(taskRepository.save(task));
+        Task savedTask = taskRepository.save(task);
+        log.info("Task created: taskId={}, projectId={}, assigneeId={}",
+                savedTask.getId(), project.getId(), request.assigneeId());
+
+        return mapper.toResponse(savedTask);
     }
 
     public void validateAssignee(UUID assigneId, UUID teamId) {
@@ -106,6 +112,7 @@ public class TaskService {
         commentRepository.deleteByTaskId(id);
 
         taskRepository.delete(task);
+        log.info("Task deleted: taskId={}, projectId={}", task.getId(), task.getProject().getId());
     }
 
     @Transactional(readOnly = true)

@@ -13,6 +13,7 @@ import com.nicolasmartineli.taskflow_api.repositories.TeamMembershipRepository;
 import com.nicolasmartineli.taskflow_api.repositories.TeamRepository;
 import com.nicolasmartineli.taskflow_api.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TeamMembershipService {
 
     private final TeamMemberShipMapper mapper;
@@ -34,7 +36,6 @@ public class TeamMembershipService {
         teamAccessService.checkAdmin(teamId);
         if (membershipRepository.existsByTeamIdAndUserId(teamId, request.userId())) {
             throw new DuplicateResourceException("TeamMembership", "userId", request.userId());
-
         }
 
         User user = userRepository.findById(request.userId())
@@ -46,8 +47,10 @@ public class TeamMembershipService {
         TeamMembership membership = mapper.toEntity(request, team, user);
 
         membershipRepository.save(membership);
-
+        log.info("Member added to team: teamId={}, userId={}, role={}",
+                teamId, user.getId(), membership.getRoleInTeam());
     }
+
     @Transactional
     public void removeMember(UUID teamId, UUID idUser) {
 
@@ -60,12 +63,10 @@ public class TeamMembershipService {
 
         if (isLastAdmin) {
             throw new BusinessRuleException("Cannot remove the last ADMIN of the team");
-
         }
-        membershipRepository.delete(membership);
 
+        membershipRepository.delete(membership);
+        log.info("Member removed from team: teamId={}, userId={}", teamId, idUser);
     }
 
 }
-
-

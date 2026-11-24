@@ -2,8 +2,10 @@ package com.nicolasmartineli.taskflow_api.services;
 
 import com.nicolasmartineli.taskflow_api.dtos.login.LoginRequest;
 import com.nicolasmartineli.taskflow_api.dtos.login.LoginResponse;
+import com.nicolasmartineli.taskflow_api.models.User;
 import com.nicolasmartineli.taskflow_api.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +17,7 @@ import java.time.Duration;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class AuthService {
 
     private final AuthenticationManager authenticationManager;
@@ -25,12 +28,15 @@ public class AuthService {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.email(), request.password()));
 
+        User user = (User) authentication.getPrincipal();
+
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         Jwt jwt = jwtService.generateToken(userDetails);
 
         long expiresIn = Duration.between(jwt.getIssuedAt(), jwt.getExpiresAt()).getSeconds();
 
+        log.info("User authenticated: userId={}", user.getId());
         return new LoginResponse(jwt.getTokenValue(), "Bearer", expiresIn);
     }
 

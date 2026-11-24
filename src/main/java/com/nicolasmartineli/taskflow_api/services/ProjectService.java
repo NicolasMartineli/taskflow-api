@@ -11,6 +11,7 @@ import com.nicolasmartineli.taskflow_api.models.Team;
 import com.nicolasmartineli.taskflow_api.repositories.ProjectRepository;
 import com.nicolasmartineli.taskflow_api.repositories.TeamRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProjectService {
 
     private final TeamRepository teamRepository;
@@ -42,8 +44,8 @@ public class ProjectService {
 
         Project save = repository.save(project);
 
+        log.info("Project created: projectId={}, teamId={}", save.getId(), team.getId());
         return mapper.toResponse(save);
-
 
     }
 
@@ -91,6 +93,8 @@ public class ProjectService {
                 .orElseThrow(() -> new ResourceNotFoundException("Project not found with id: " + idProject));
 
         teamAccessService.checkAdmin(project.getTeam().getId());
+
         repository.delete(project);
+        log.info("Project deleted: projectId={}, teamId={}", project.getId(), project.getTeam().getId());
     }
 }

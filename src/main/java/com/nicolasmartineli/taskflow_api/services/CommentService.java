@@ -12,6 +12,7 @@ import com.nicolasmartineli.taskflow_api.repositories.CommentRepository;
 import com.nicolasmartineli.taskflow_api.repositories.TaskRepository;
 import com.nicolasmartineli.taskflow_api.repositories.TeamMembershipRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CommentService {
 
     private final CommentRepository commentRepository;
@@ -47,7 +49,11 @@ public class CommentService {
         comment.setTask(task);
         comment.setAuthor(author);
 
-        return mapper.toResponse(commentRepository.save(comment));
+        Comment savedComment = commentRepository.save(comment);
+        log.info("Comment created: commentId={}, taskId={}, authorId={}",
+                savedComment.getId(), taskId, author.getId());
+
+        return mapper.toResponse(savedComment);
     }
 
     @Transactional(readOnly = true)
@@ -58,7 +64,6 @@ public class CommentService {
         teamAccessService.checkMember(task.getProject().getTeam().getId());
 
         return commentRepository.findByTaskId(id).stream().map(mapper::toResponse).toList();
-
     }
 
     @Transactional
@@ -67,6 +72,7 @@ public class CommentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Comment not found with id: " + id));
 
         User currentUser = currentUserService.getCurrentUser();
+        UUID taskId = comment.getTask().getId();
         UUID teamId = comment.getTask().getProject().getTeam().getId();
 
         boolean isAuthor = comment.getAuthor().getId().equals(currentUser.getId());
@@ -77,7 +83,8 @@ public class CommentService {
         }
 
         commentRepository.delete(comment);
+        log.info("Comment deleted: commentId={}, taskId={}, deletedBy={}",
+                id, taskId, currentUser.getId());
     }
 
 }
-

@@ -25,4 +25,8 @@ public record ApiError(Integer status, String message, List<ErrorField> errors) 
     public static ApiError forbidden(String message) {
         return new ApiError(HttpStatus.FORBIDDEN.value(), message, List.of());
     }
+
+    public static ApiError internalServerError(String message) {
+        return new ApiError(HttpStatus.INTERNAL_SERVER_ERROR.value(), message, List.of());
+    }
 }

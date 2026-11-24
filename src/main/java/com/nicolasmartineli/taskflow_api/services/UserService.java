@@ -10,6 +10,7 @@ import com.nicolasmartineli.taskflow_api.models.User;
 import com.nicolasmartineli.taskflow_api.repositories.UserRepository;
 import com.nicolasmartineli.taskflow_api.repositories.specs.UserSpec;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,6 +23,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
 
     private final UserMapper mapper;
@@ -42,6 +44,7 @@ public class UserService {
 
         User user = repository.save(entity);
 
+        log.info("User created: userId={}", user.getId());
         return mapper.toResponse(user);
 
     }
@@ -87,6 +90,7 @@ public class UserService {
 
         User user = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
+        log.info("User deleted: userId={}", user.getId());
         repository.delete(user);
     }
 

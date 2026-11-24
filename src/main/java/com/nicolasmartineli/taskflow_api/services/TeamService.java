@@ -15,6 +15,7 @@ import com.nicolasmartineli.taskflow_api.repositories.ProjectRepository;
 import com.nicolasmartineli.taskflow_api.repositories.TeamMembershipRepository;
 import com.nicolasmartineli.taskflow_api.repositories.TeamRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TeamService {
 
     private final TeamRepository repository;
@@ -48,6 +50,7 @@ public class TeamService {
         membership.setRoleInTeam(TeamRole.ADMIN);
         teamMembershipRepository.save(membership);
 
+        log.info("Team created: teamId={}, creatorId={}", team.getId(), creator.getId());
         return mapper.toResponse(team, List.of(membership));
     }
 
@@ -82,6 +85,10 @@ public class TeamService {
         }
 
         teamMembershipRepository.deleteByTeamId(id);
+
+        User user = currentUserService.getCurrentUser();
+        repository.delete(team);
+        log.info("Team deleted: teamId={}, userId={}", team.getId(), user.getId());
         repository.delete(team);
     }
 
