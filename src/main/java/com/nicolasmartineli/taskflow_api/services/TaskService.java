@@ -13,6 +13,7 @@ import com.nicolasmartineli.taskflow_api.models.enums.TaskPriority;
 import com.nicolasmartineli.taskflow_api.models.enums.TaskStatus;
 import com.nicolasmartineli.taskflow_api.repositories.*;
 import com.nicolasmartineli.taskflow_api.repositories.specs.TaskSpec;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -37,6 +38,7 @@ public class TaskService {
     private final CommentRepository commentRepository;
     private final TeamAccessService teamAccessService;
     private final CurrentUserService currentUserService;
+    private final MeterRegistry meterRegistry;
 
     @Transactional
     public TaskResponse create(TaskCreateRequest request) {
@@ -61,6 +63,7 @@ public class TaskService {
         }
 
         Task savedTask = taskRepository.save(task);
+        meterRegistry.counter("taskflow.tasks.created").increment();
         log.info("Task created: taskId={}, projectId={}, assigneeId={}",
                 savedTask.getId(), project.getId(), request.assigneeId());
 
