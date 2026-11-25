@@ -42,8 +42,8 @@ logging:
     org.springframework.security: INFO
     org.hibernate.SQL: DEBUG
   pattern:
-    console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr(%5p) %clr(%-30.30logger{29}){cyan} : %m%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %-40.40logger{39} : %m%n"
+    console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr([%X{requestId:-}]){yellow} %clr(%5p) %clr(%-30.30logger{29}){cyan} : %m%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{requestId:-}] %5p %-40.40logger{39} : %m%n"
 
 management:
   endpoints:

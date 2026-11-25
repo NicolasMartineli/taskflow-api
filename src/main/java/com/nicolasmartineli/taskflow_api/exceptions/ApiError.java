@@ -29,4 +29,9 @@ public record ApiError(Integer status, String message, List<ErrorField> errors) 
     public static ApiError internalServerError(String message) {
         return new ApiError(HttpStatus.INTERNAL_SERVER_ERROR.value(), message, List.of());
     }
+
+    public static ApiError badRequest(String message) {
+        return new ApiError(HttpStatus.BAD_REQUEST.value(), message, List.of());
+    }
+
 }
