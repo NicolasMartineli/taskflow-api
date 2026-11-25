@@ -44,3 +44,18 @@ logging:
   pattern:
     console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr(%5p) %clr(%-30.30logger{29}){cyan} : %m%n"
     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %-40.40logger{39} : %m%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: never
+
+info:
+  app:
+    name: TaskFlow API
+    description: REST API for team task management
+    version: 1.0.0
